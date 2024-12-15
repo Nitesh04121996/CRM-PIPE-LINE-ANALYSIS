@@ -1,62 +1,56 @@
-# CRM-PIPE-LINE-ANALYSIS
-# CRM Sales Opportunities Project
+# Data Modelling
 
-## Description 
+## Star Schema Structure
 
-This project involves the analysis of B2B sales pipeline data for a fictitious company that specializes in selling computer hardware. The objective is to gain actionable insights into the company's sales operations by examining various aspects of the data, including sales opportunities, product performance, account activities, and sales team efficiency.
+In this project, I used a star schema structure to organize the data for efficient querying and analysis.
 
-**Data Source:** Maven Analytics.
+#### Fact table
 
-## Objectives
-
-The main goals of this project are to:
-
-* **Assess Sales Team Performance.** How is each sales team performing in comparison to others? Identifying the top-performing teams and those that may need improvement.
-
-* **Evaluate Sales Agent Productivity.** Are any sales agents significantly lagging behind? Determining which agents are underperforming and may require additional support or training.
-
-* **Identify Trends.** Can any quarter-over-quarter trends be observed? Understanding patterns in sales performance.
-
-* **Analyze Product Success Rates.** Do any products have better win rates than others? Investigating which products are more successful in closing deals.
-
-A personal objective of this project was to strengthen my ability to write more complex SQL queries using Common Table Expressions (CTEs) and Window Functions. Additionally, I aimed to deepen my skills in creating advanced DAX measures and building dynamic dashboards in Power BI.
-
-## Project Phases
-
-#### [Data Preparation](https://github.com/natalyamn/CRM_Sales_Opportunities_project/tree/main/1.%20Data%20Preparation)
-
-* **Data Examination:** Review of raw data files, including data structure, contents, and any initial observations.
-
-* **Data Transformation:** Processing the data to ensure it's ready for efficient analysis.
-
-#### [Data Modelling](https://github.com/natalyamn/CRM_Sales_Opportunities_project/tree/main/2.%20Data%20Modelling)
-
-* **Schema Structure:** Defining relationships and structure of the data.
+* **sales_pipeline**
   
-* **Database and Tables Creation:** Setting up tables in a SQL database for analysis.
+  * *opportunity_id*: The primary key (PK) for the fact table, uniquely identifying each sales opportunity.
+  * *account_id*: A foreign key (FK) linking to the accounts dimension table, identifying the company involved in the sales opportunity.
+  * *agent_id*: A foreign key (FK) linking to the sales_teams dimension table, identifying the sales agent responsible for the opportunity.
+  * *product_id*: A foreign key (FK) linking to the products dimension table, identifying the product involved in the sales opportunity.
+      
+#### Dimension tables
 
-* **Data Loading:** Loading the prepared data into the database.
-  
-#### [Data Analysis](https://github.com/natalyamn/CRM_Sales_Opportunities_project/tree/main/3.%20Data%20Analysis)
+Each dimension table has a many-to-one relationship with the fact table, meaning multiple records in the fact table can relate to a single record in a dimension table.
 
-* **SQL Querying:** Use of SQL queries to explore and address the project's core objectives.
+* **accounts**:
 
-* **Key Focus Areas:**
-  * Sales Team Performance    
-  * Underperforming Sales Agents
-  * Quarterly Trends
-  * Product Success Rates  
-  * Sector Performance
-  * Sales Cycle Duration
-  
-#### [Report Creation](https://github.com/natalyamn/CRM_Sales_Opportunities_project/tree/main/4.%20Report%20Creation) 
+  * *account_id*: The primary key (PK) that uniquely identifies each company.
 
-* **Insights Presentation:** Use of Power BI to build a comprehensive report.
- 
-**Link to the Interactive Power BI Report:** [**Report**](https://app.powerbi.com/view?r=eyJrIjoiNGJlYTc2MTYtYzJiNy00ZmY2LWIyMzktN2Y0N2NiZGUwY2IyIiwidCI6IjAxMjJmNmU1LTFkMDAtNDU4Zi1hMjNlLWI4YTk4YmJhMDczZCIsImMiOjl9) 
+* **sales_teams**:
 
-*Disclaimer: The units displayed in this report may vary depending on the regional settings of your browser. This report was designed with the US region in mind. Please adjust your regional settings if necessary to match the units used in this report.*
+  * *agent_id*: The primary key (PK) that uniquely identifies each sales agent or team member.
 
-![image](https://github.com/user-attachments/assets/41b9bc3e-a4f8-44c6-8813-aefe4dcedb40)
+* **products**:
 
-* **Actionable Insights:** Summarizing key findings and providing data-driven recommendations.
+  * *product_id*: The primary key (PK) that uniquely identifies each product.
+
+## Database and Tables Creation
+
+I designed and implemented the database in MySQL, where I created each table (fact and dimension) based on the schema defined above. The creation process involved:
+
+* Defining the tables: I used SQL scripts to create the sales_pipeline, accounts, sales_teams, and products tables, specifying the appropriate data types and constraints (e.g., primary keys, foreign keys, NOT NULL).
+
+* Establishing relationships: I set up foreign key constraints to enforce referential integrity between the fact and dimension tables.
+
+The SQL script I used for this process is available here: [**db_creation_crm_sales.sql**](https://github.com/natalyamn/CRM_Sales_Opportunities_project/blob/main/2.%20Data%20Modelling/db_creation_crm_sales.sql)
+
+## Data Loading 
+
+Once the tables were created, I proceeded to load the data into the database.
+
+* Data Import: I imported the raw data (transformed during the Data Preparation phase) into the MySQL database using SQL commands. During this process, I ensured the data was correctly mapped to the corresponding columns in the tables.
+
+* Data Integrity: For columns with empty string records (identified during the Data Preparation phase), I converted those to NULL values to accurately represent missing data.
+
+The SQL script for data loading can also be found here: [**db_creation_crm_sales.sql**](https://github.com/natalyamn/CRM_Sales_Opportunities_project/blob/main/2.%20Data%20Modelling/db_creation_crm_sales.sql)
+
+## Entity-Relationship Diagram
+
+The following Entity-Relationship Diagram (ERD) visually represents the star schema structure, providing a clear overview of the database architecture and the relationships between entities.
+
+![db_crm_sales_diagram](https://github.com/user-attachments/assets/6e8e2d0b-350a-4952-a035-839b967d9247)
